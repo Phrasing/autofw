@@ -83,9 +83,10 @@ class TileManager:
         screen_height: int = 1080,
     ):
         self.max_tiles = max_tiles
-        self.columns = columns
-        self.rows = max_tiles // columns
-        self.window_width = screen_width // columns
+        # Adjust columns if fewer tiles than columns
+        self.columns = min(columns, max_tiles)
+        self.rows = max(1, (max_tiles + self.columns - 1) // self.columns)  # Ceiling division
+        self.window_width = screen_width // self.columns
         self.window_height = screen_height // self.rows
         self._available = list(range(max_tiles))
         self._lock = asyncio.Lock()
