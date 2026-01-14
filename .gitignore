@@ -45,3 +45,5 @@ accounts.csv
 
 # Claude
 .claude/
+
+.env

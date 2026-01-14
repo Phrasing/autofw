@@ -119,7 +119,6 @@ async def create_single_account(
     email_client: GmailClient,
     semaphore: asyncio.Semaphore,
     tile_manager: TileManager,
-    headless: bool = True,
 ) -> AccountResult:
     """Create a single account with semaphore-controlled concurrency."""
     async with semaphore:
@@ -128,9 +127,9 @@ async def create_single_account(
         position, size = tile_manager.get_position(tile_slot)
 
         config = BrowserConfig(
-            headless=headless,
+            headless=False,
             speed=1.5,
-            debug_cursor=not headless,
+            debug_cursor=True,
             window_position=position,
             window_size=size,
         )
@@ -180,12 +179,10 @@ async def main():
     # Optional config with defaults
     num_accounts = int(os.getenv("NUM_ACCOUNTS", "3"))
     max_concurrent = int(os.getenv("MAX_CONCURRENT", "2"))
-    headless = os.getenv("HEADLESS", "true").lower() == "true"
 
     print("Configuration:")
     print(f"  Accounts to create: {num_accounts}")
     print(f"  Max concurrent: {max_concurrent}")
-    print(f"  Headless: {headless}")
     print()
 
     # Setup shared email client
@@ -209,9 +206,7 @@ async def main():
     print()
 
     # Run all account creations concurrently with tiled windows
-    tasks = [
-        create_single_account(i, acc, email_client, semaphore, tile_manager, headless) for i, acc in enumerate(accounts)
-    ]
+    tasks = [create_single_account(i, acc, email_client, semaphore, tile_manager) for i, acc in enumerate(accounts)]
     results = await asyncio.gather(*tasks, return_exceptions=True)
 
     # Filter valid results
