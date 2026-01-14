@@ -196,6 +196,7 @@ class Browser:
         )
 
     async def _human_move_to(self, element) -> None:
+        await self._inject_debug_cursor()  # Re-inject in case page changed
         target_x, target_y = await self._get_element_center(element)
         path = self.mouse.generate_path(self.cursor_x, self.cursor_y, target_x, target_y)
         delays = self.mouse.calculate_delays(path)
