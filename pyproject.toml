@@ -1,0 +1,30 @@
+[project]
+name = "autofw"
+version = "0.1.0"
+description = "Browser automation framework with human-like behavior"
+requires-python = ">=3.11"
+dependencies = [
+    "nodriver>=0.32",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "faker>=20.0",
+    "python-dotenv>=1.0",
+    "opencv-python>=4.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.ruff.lint.per-file-ignores]
+"autofw/browser.py" = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
